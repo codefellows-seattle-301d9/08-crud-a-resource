@@ -99,8 +99,8 @@
 
   Article.truncateTable = function() {
     webDB.execute(
-      // TODO: Use correct SQL syntax to delete all records from the articles table.
-      'DELETE ...;' // <----finish the command here, inside the quotes.
+      // TODO - Done Elizabeth: Use correct SQL syntax to delete all records from the articles table.
+      'DELETE * FROM articleTable;' // <----finish the command here, inside the quotes.
     );
   };
 
