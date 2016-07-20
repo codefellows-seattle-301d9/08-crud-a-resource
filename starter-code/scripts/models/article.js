@@ -21,7 +21,7 @@
   // Set up a DB table for articles.
   Article.createTable = function() {
     webDB.execute(
-      'CREATE TABLE articles(title, category, author, authorUrl, publishedOn, body)', // DONE: What SQL command do we run here inside these quotes?
+      'CREATE TABLE articles(title, category, author, authorUrl, publishedOn, body);', // DONE: What SQL command do we run here inside these quotes?
       function() {
         console.log('Successfully set up the articles table.');
       }
@@ -41,7 +41,7 @@
         (most recent article first!), and then hand off control to the View.
       Otherwise (if the DB is empty) we need to retrieve the JSON and process it. */
 
-    webDB.execute('SELECT * FROM articles', function(rows) { // DONE: fill these quotes to query our table.
+    webDB.execute('SELECT * FROM articles;', function(rows) { // DONE: fill these quotes to query our table.
       if (rows.length) {
         Article.loadAll(rows);
         nextFunction();
@@ -55,17 +55,18 @@
           // Save each article from this JSON file, so we don't need to request it next time:
           responseData.forEach(function(obj) {
             var article = new Article(obj); // This will instantiate an article instance based on each article object from our JSON.
-            /* TODO:
+            /* DONE:
                1 - 'insert' the newly-instantiated article in the DB:
                 (hint: what can we call on this article instance?). */
-
+            Article.insertRecord();
           });
           // Now get ALL the records out the DB, with their database IDs:
-          webDB.execute('SELECT *', function(rows) { // TODO: select our now full table
-            // TODO:
+          webDB.execute('SELECT * FROM articles;', function(rows) { // DONE: select our now full table
+            // DONE:
             // 1 - Use Article.loadAll to generate our rows,
             // 2 - Pass control to the view by calling the next function that was passed in to Article.fetchAll
-
+            Article.loadAll(rows);
+            nextFunction();
           });
         });
       }
@@ -76,9 +77,9 @@
     webDB.execute(
       [
         {
-          // TODO: Insert an article instance into the database:
+          // DONE: Insert an article instance into the database:
           // NOTE: this method will be called elsewhere after we retrieve our JSON
-          'sql': '', // <----- complete our SQL command here, inside the quotes.
+          'sql': 'INSERT INTO articles (title, category, author, authorUrl, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?); ', // <----- complete our SQL command here, inside the quotes.
           'data': [this.title, this.author, this.authorUrl, this.category, this.publishedOn, this.body]
         }
       ]
