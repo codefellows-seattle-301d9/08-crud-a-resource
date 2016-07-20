@@ -21,7 +21,7 @@
   // Set up a DB table for articles.
   Article.createTable = function() {
     webDB.execute(
-      '', // TODO: What SQL command do we run here inside these quotes?
+      'CREATE TABLE articleTable (id INTEGER PRIMARY KEY, title VARCHAR, author VARCHAR, authorUrl VARCHAR, category VARCHAR, publishedOn DATE, body VARCHAR);', // TODO - Done Elizabeth: What SQL command do we run here inside these quotes?
       function() {
         console.log('Successfully set up the articles table.');
       }
