@@ -21,7 +21,7 @@
   // Set up a DB table for articles.
   Article.createTable = function() {
     webDB.execute(
-      '', // TODO: What SQL command do we run here inside these quotes?
+      'CREATE TABLE articles(title, category, author, authorUrl, publishedOn, body)', // DONE: What SQL command do we run here inside these quotes?
       function() {
         console.log('Successfully set up the articles table.');
       }
@@ -41,9 +41,11 @@
         (most recent article first!), and then hand off control to the View.
       Otherwise (if the DB is empty) we need to retrieve the JSON and process it. */
 
-    webDB.execute('', function(rows) { // TODO: fill these quotes to query our table.
+    webDB.execute('SELECT * FROM articles', function(rows) { // DONE: fill these quotes to query our table.
       if (rows.length) {
-        /* TODO:
+        Article.loadAll(rows);
+        nextFunction();
+        /* DONE:
            1 - Use Article.loadAll to instanitate these rows,
            2 - Pass control to the view by invoking the next function that
                 was passed in to Article.fetchAll */
@@ -59,7 +61,7 @@
 
           });
           // Now get ALL the records out the DB, with their database IDs:
-          webDB.execute('', function(rows) { // TODO: select our now full table
+          webDB.execute('SELECT *', function(rows) { // TODO: select our now full table
             // TODO:
             // 1 - Use Article.loadAll to generate our rows,
             // 2 - Pass control to the view by calling the next function that was passed in to Article.fetchAll
