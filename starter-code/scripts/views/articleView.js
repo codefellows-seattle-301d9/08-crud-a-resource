@@ -73,6 +73,7 @@
     articleView.handleMainNav();
     articleView.setTeasers();
   };
+  //TODO: uncomment fetchAll when ready
   Article.fetchAll(articleView.renderIndexPage);
   module.articleView = articleView;
 })(window);
