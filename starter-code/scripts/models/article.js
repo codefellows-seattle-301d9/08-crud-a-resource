@@ -21,7 +21,7 @@
   // Set up a DB table for articles.
   Article.createTable = function() {
     webDB.execute(
-      'CREATE TABLE articleTable (id INTEGER PRIMARY KEY, title VARCHAR, author VARCHAR, authorUrl VARCHAR, category VARCHAR, publishedOn DATE, body VARCHAR);', // TODO - Done Elizabeth: What SQL command do we run here inside these quotes?
+      'CREATE TABLE IF NOT EXISTS articleTable (id INTEGER PRIMARY KEY, title VARCHAR, author VARCHAR, authorUrl VARCHAR, category VARCHAR, publishedOn VARCHAR, body VARCHAR);', // TODO - Done Elizabeth: What SQL command do we run here inside these quotes?
       function() {
         console.log('Successfully set up the articles table.');
       }
@@ -41,7 +41,7 @@
         (most recent article first!), and then hand off control to the View.
       Otherwise (if the DB is empty) we need to retrieve the JSON and process it. */
 
-    webDB.execute('SELECT * FROM articleTable ORDER BY date DESC;', function(rows) { // TODO - Done ELizabeth: fill these quotes to query our table.
+    webDB.execute('SELECT * FROM articleTable ORDER BY publishedOn DESC;', function(rows) { // TODO - Done ELizabeth: fill these quotes to query our table.
       if (rows.length) {
         Article.loadAll(rows);
         nextFunction();
@@ -55,17 +55,16 @@
           // Save each article from this JSON file, so we don't need to request it next time:
           responseData.forEach(function(obj) {
             var article = new Article(obj); // This will instantiate an article instance based on each article object from our JSON.
-            /* TODO:
-               1 - 'insert' the newly-instantiated article in the DB:
-                (hint: what can we call on this article instance?). */
-
+            /* TODO: DONE Derek 'insert' the newly-instantiated article in the DB: (hint: what can we call on this article instance?). */
+            article.insertRecord();
           });
           // Now get ALL the records out the DB, with their database IDs:
-          webDB.execute('', function(rows) { // TODO: select our now full table
-            // TODO:
+          webDB.execute('SELECT * FROM articleTable;', function(rows) { // TODO: DONE Derek select our now full table
+            // TODO: DONE Derek
             // 1 - Use Article.loadAll to generate our rows,
+            Article.loadAll(rows);
             // 2 - Pass control to the view by calling the next function that was passed in to Article.fetchAll
-
+            nextFunction();
           });
         });
       }
@@ -76,9 +75,10 @@
     webDB.execute(
       [
         {
-          // TODO: Insert an article instance into the database:
+          // TODO: DONE Derek Insert an article instance into the database:
           // NOTE: this method will be called elsewhere after we retrieve our JSON
-          'sql': '', // <----- complete our SQL command here, inside the quotes.
+          'sql': 'INSERT INTO articleTable (title, author, authorUrl, category, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?);',
+          // above complete our SQL command, inside the quotes.
           'data': [this.title, this.author, this.authorUrl, this.category, this.publishedOn, this.body]
         }
       ]
@@ -89,10 +89,9 @@
     webDB.execute(
       [
         {
-          // TODO: Delete an article instance from the database based on its id:
-          /* Note: this is an advanced admin option, so you will need to test
-              out an individual query in the console */
-          'sql': '', // <--- complete the command here, inside the quotes;
+          // TODO: DONE Derek Delete an article instance from the database based on its id:
+          /* Note: this is an advanced admin option, so you will need to test out an individual query in the console */
+          'sql': 'DELETE FROM articleTable WHERE id = ?;', // <--- complete the command here, inside the quotes;
           'data': [this.id]
         }
       ]
@@ -102,7 +101,7 @@
   Article.truncateTable = function() {
     webDB.execute(
       // TODO - Done Elizabeth: Use correct SQL syntax to delete all records from the articles table.
-      'DELETE * FROM articleTable;' // <----finish the command here, inside the quotes.
+      'DELETE FROM articleTable;' // <----finish the command here, inside the quotes.
     );
   };
 
