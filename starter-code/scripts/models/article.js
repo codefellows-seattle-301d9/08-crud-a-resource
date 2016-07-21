@@ -41,7 +41,7 @@
         (most recent article first!), and then hand off control to the View.
       Otherwise (if the DB is empty) we need to retrieve the JSON and process it. */
 
-    webDB.execute('SELECT * FROM articles;', function(rows) { // DONE: fill these quotes to query our table.
+    webDB.execute('SELECT * FROM articles ORDER BY publishedOn DESC;', function(rows) { // DONE: fill these quotes to query our table.
       if (rows.length) {
         Article.loadAll(rows);
         nextFunction();
@@ -61,7 +61,7 @@
             article.insertRecord();
           });
           // Now get ALL the records out the DB, with their database IDs:
-          webDB.execute('SELECT * FROM articles;', function(rows) { // DONE: select our now full table
+          webDB.execute('SELECT * FROM articles ORDER BY publishedOn DESC;', function(rows) { // DONE: select our now full table
             // DONE:
             // 1 - Use Article.loadAll to generate our rows,
             // 2 - Pass control to the view by calling the next function that was passed in to Article.fetchAll
