@@ -58,7 +58,7 @@
             /* DONE:
                1 - 'insert' the newly-instantiated article in the DB:
                 (hint: what can we call on this article instance?). */
-            Article.insertRecord();
+            article.insertRecord();
           });
           // Now get ALL the records out the DB, with their database IDs:
           webDB.execute('SELECT * FROM articles;', function(rows) { // DONE: select our now full table
@@ -80,7 +80,7 @@
           // DONE: Insert an article instance into the database:
           // NOTE: this method will be called elsewhere after we retrieve our JSON
           'sql': 'INSERT INTO articles (title, category, author, authorUrl, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?); ', // <----- complete our SQL command here, inside the quotes.
-          'data': [this.title, this.author, this.authorUrl, this.category, this.publishedOn, this.body]
+          'data': [this.title, this.category, this.author, this.authorUrl, this.publishedOn, this.body]
         }
       ]
     );
@@ -90,10 +90,10 @@
     webDB.execute(
       [
         {
-          // TODO: Delete an article instance from the database based on its id:
+          // DONE: Delete an article instance from the database based on its id:
           /* Note: this is an advanced admin option, so you will need to test
               out an individual query in the console */
-          'sql': '', // <--- complete the command here, inside the quotes;
+          'sql': 'DELETE FROM articles WHERE id = ?;', // <--- complete the command here, inside the quotes;
           'data': [this.id]
         }
       ]
@@ -102,8 +102,8 @@
 
   Article.truncateTable = function() {
     webDB.execute(
-      // TODO: Use correct SQL syntax to delete all records from the articles table.
-      'DELETE ...;' // <----finish the command here, inside the quotes.
+      // DONE: Use correct SQL syntax to delete all records from the articles table.
+      'DELETE * FROM articles;' // <----finish the command here, inside the quotes.
     );
   };
 
@@ -146,5 +146,6 @@
   };
 
 // TODO: ensure that our table has been setup.
+  Article.createTable();
   module.Article = Article;
 })(window);
